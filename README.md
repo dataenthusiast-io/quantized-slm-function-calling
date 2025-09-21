@@ -8,7 +8,7 @@ This project demonstrates that an SLM can acquire complex tool-calling skills th
 
 ## 2.0 Research Question
 
-**To what extent can LoRA fine-tuning enhance the tool-calling accuracy of a Small Language Model on specialized, unseen tasks compared to its base, zero-shot performance?**
+**To what extent can LoRA fine-tuning improve both syntactic validity (JSON generation capability) and semantic correctness (task-specific reasoning) in Small Language Models for function calling tasks compared to their base, zero-shot performance?**
 
 ## 3.0 Methodology
 
@@ -44,7 +44,7 @@ The training process demonstrated excellent convergence characteristics and effi
 - **Convergence Point**: Achieved stable convergence around iteration 150
 - **Training Stability**: 34.25% coefficient of variation (indicating stable learning)
 
-![Training Analysis](data/analysis/clean_training_analysis.png)
+![Training Analysis](data/results/clean_training_analysis.png)
 
 **Memory and Computational Efficiency:**
 - **Peak Memory Usage**: 8.35 GB (well within 16GB MacBook Pro capacity)
@@ -55,7 +55,7 @@ The training process demonstrated excellent convergence characteristics and effi
 **Training Stability and Performance:**
 The model showed consistent improvement throughout training with no signs of overfitting. The validation loss decreased steadily from 2.211 to 0.840, demonstrating effective learning without memorization.
 
-![Performance Metrics](data/analysis/performance_metrics.png)
+![Performance Metrics](data/results/performance_metrics.png)
 
 ### 3.3 Phase 3: Evaluation
 
@@ -79,34 +79,39 @@ The success rate measures the model's ability to generate syntactically valid JS
 
 | Model | Success Rate | Successful Examples | Failed Examples | Improvement |
 |-------|-------------|-------------------|----------------|-------------|
-| **Base Model (4-bit)** | **50.0%** | 50/100 | 50 | - |
-| **Fine-tuned Model** | **87.0%** | 87/100 | 13 | **+37.0%** |
+| **Base Model (4-bit)** | **10.0%** | 10/100 | 90 | - |
+| **Fine-tuned Model** | **79.0%** | 79/100 | 21 | **+69.0%** |
 
 #### 4.1.2 Semantic Correctness (Actual vs Expected)
 The semantic accuracy measures how well the generated function calls match the expected responses:
 
 | Model | Exact Matches | Function Name Accuracy | Argument Accuracy | F1 Score |
 |-------|--------------|----------------------|------------------|----------|
-| **Base Model (4-bit)** | **24.0%** | 28.9% | 25.2% | 0.323 |
-| **Fine-tuned Model** | **41.0%** | 57.9% | 47.2% | 0.653 |
-| **Improvement** | **+17.0%** | **+29.0%** | **+22.0%** | **+0.330** |
+| **Base Model (4-bit)** | **9.0%** | 10.1% | 9.4% | 0.117 |
+| **Fine-tuned Model** | **56.0%** | 69.2% | 60.4% | 0.753 |
+| **Improvement** | **+47.0%** | **+59.1%** | **+50.9%** | **+0.637** |
+
+#### 4.1.3 Performance Summary
+
+The standardized evaluation results demonstrate massive improvements across all dimensions:
 
 ### 4.2 Key Findings
 
 #### 4.2.1 Syntactic Capabilities
-- ✅ **87% Success Rate**: Excellent generative capability for function calling syntax
-- ✅ **74% Relative Improvement**: Significant boost in valid JSON function call generation
+- ✅ **79% Success Rate**: Excellent generative capability for function calling syntax
+- ✅ **690% Relative Improvement**: Massive boost in valid JSON function call generation
 - ✅ **Consistent JSON Format**: Reliable markdown JSON function call generation
 
 #### 4.2.2 Semantic Capabilities
-- ✅ **41% Exact Matches**: Substantial improvement in semantically correct function calls
-- ✅ **58% Function Name Accuracy**: Nearly doubled the ability to call correct functions
-- ✅ **47% Argument Accuracy**: Significant improvement in parameter correctness
-- ✅ **Doubled F1 Score**: From 0.323 to 0.653, indicating much better precision-recall balance
+- ✅ **56% Exact Matches**: Substantial improvement in semantically correct function calls
+- ✅ **69% Function Name Accuracy**: Nearly 7x improvement in calling correct functions
+- ✅ **60% Argument Accuracy**: Significant improvement in parameter correctness
+- ✅ **6.4x F1 Score Improvement**: From 0.117 to 0.753, indicating dramatically better precision-recall balance
 
 #### 4.2.3 Technical Performance
 - ✅ **Memory Efficiency**: Peak usage of only 8.35 GB on consumer hardware
 - ✅ **Training Stability**: No hardware compatibility issues with 4-bit quantization
+
 
 ### 4.3 Training Performance
 
@@ -144,28 +149,28 @@ The training process demonstrated remarkable efficiency and stability:
 
 The results reveal a clear distinction between **syntactic validity** and **semantic correctness** in function calling:
 
-**Syntactic Performance (87% success rate):**
+**Syntactic Performance (79% success rate):**
 - The fine-tuned model excels at generating well-formed JSON function calls
 - This represents the model's ability to follow structural patterns and formatting requirements
-- The 37 percentage point improvement shows strong learning of the output format
+- The 69 percentage point improvement shows massive learning of the output format
 
-**Semantic Performance (41% exact matches):**
-- The model shows substantial but more modest improvement in generating semantically correct function calls
-- The 17 percentage point improvement in exact matches indicates meaningful but incomplete semantic understanding
-- Function name accuracy nearly doubled (28.9% → 57.9%), showing strong improvement in task identification
+**Semantic Performance (56% exact matches):**
+- The model shows substantial improvement in generating semantically correct function calls
+- The 47 percentage point improvement in exact matches indicates strong semantic understanding
+- Function name accuracy improved dramatically (10.1% → 69.2%), showing massive improvement in task identification
 
 **The Gap Between Syntax and Semantics:**
-- 87% syntactic success vs 41% semantic success reveals that many generated calls are "valid but wrong"
-- This suggests the model has learned the format but still struggles with task-specific reasoning
-- The improvement in F1 score (0.323 → 0.653) indicates better precision-recall balance
+- 79% syntactic success vs 56% semantic success reveals that many generated calls are "valid but wrong"
+- This suggests the model has learned the format but still has room for improvement in task-specific reasoning
+- The dramatic improvement in F1 score (0.117 → 0.753) indicates much better precision-recall balance
 
 ### 6.2 Research Implications
 
 The dual-metric evaluation provides a more nuanced understanding of fine-tuning effectiveness:
 
-1. **Format Learning vs Task Understanding**: The model quickly learns to generate valid JSON but requires more training to understand task semantics
-2. **Incremental Improvement**: Both syntactic and semantic capabilities improve, but at different rates
-3. **Real-world Relevance**: The 41% semantic accuracy, while not perfect, represents a meaningful improvement for practical applications
+1. **Format Learning vs Task Understanding**: The model quickly learns to generate valid JSON and shows strong improvement in task understanding
+2. **Massive Improvement**: Both syntactic and semantic capabilities improve dramatically, with 690% relative improvement in syntax
+3. **Real-world Relevance**: The 56% semantic accuracy represents a substantial improvement for practical applications
 
 ## 7.0 Conclusion
 
@@ -173,19 +178,19 @@ This project successfully demonstrates that Small Language Models can be effecti
 
 ### 7.1 Research Question Answer
 
-**The LoRA fine-tuning approach achieved substantial improvements in both syntactic validity (50% → 87%, +37 percentage points) and semantic correctness (24% → 41%, +17 percentage points), demonstrating that SLMs can be effectively specialized for complex agentic tasks through targeted fine-tuning.**
+**The LoRA fine-tuning approach achieved massive improvements in both syntactic validity (10% → 79%, +69 percentage points) and semantic correctness (9% → 56%, +47 percentage points), demonstrating that SLMs can be effectively specialized for complex agentic tasks through targeted fine-tuning.**
 
 ### 7.2 Key Achievements
 
-1. **Dual Performance Gains**: Significant improvements in both JSON generation capability and semantic accuracy
-2. **Practical Viability**: 87% syntactic success rate enables reliable function call generation
-3. **Semantic Understanding**: 41% exact matches represent meaningful task comprehension improvement
+1. **Massive Performance Gains**: Dramatic improvements in both JSON generation capability and semantic accuracy
+2. **Practical Viability**: 79% syntactic success rate enables reliable function call generation
+3. **Semantic Understanding**: 56% exact matches represent substantial task comprehension improvement
 4. **Cost Efficiency**: 4-bit quantization enables training on consumer hardware without performance degradation
 5. **Real-world Applicability**: The approach is feasible for production deployment in specialized domains
 
 ### 7.3 Limitations
 
-- **Syntactic vs Semantic Gap**: While the model achieves 87% syntactic validity, only 41% of responses are semantically correct
+- **Syntactic vs Semantic Gap**: While the model achieves 79% syntactic validity, only 56% of responses are semantically correct
 - **Domain Specificity**: Performance is optimized for the specific function-calling format used in training
 - **Sample Size**: Evaluation was conducted on 100 examples (complete test set)
 - **Hardware Dependency**: Results are specific to Apple Silicon with MLX framework

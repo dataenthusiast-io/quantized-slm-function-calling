@@ -1,0 +1,38 @@
+{
+  "base_model": {
+    "model_name": "Base Model (4-bit)",
+    "total_examples": 100,
+    "exact_matches": 24,
+    "exact_match_rate": 0.24,
+    "avg_precision": 0.7766666666666667,
+    "avg_recall": 0.33,
+    "avg_f1_score": 0.32333333333333336,
+    "function_name_accuracy": 0.2893081761006289,
+    "argument_accuracy": 0.25157232704402516,
+    "total_expected_functions": 159,
+    "total_actual_functions": 79,
+    "total_name_matches": 46,
+    "total_argument_matches": 40
+  },
+  "finetuned_model": {
+    "model_name": "Fine-tuned Model",
+    "total_examples": 100,
+    "exact_matches": 41,
+    "exact_match_rate": 0.41,
+    "avg_precision": 0.86,
+    "avg_recall": 0.6166666666666667,
+    "avg_f1_score": 0.6533333333333333,
+    "function_name_accuracy": 0.5786163522012578,
+    "argument_accuracy": 0.4716981132075472,
+    "total_expected_functions": 159,
+    "total_actual_functions": 106,
+    "total_name_matches": 92,
+    "total_argument_matches": 75
+  },
+  "improvements": {
+    "exact_match_rate": 0.16999999999999998,
+    "f1_score": 0.32999999999999996,
+    "function_name_accuracy": 0.2893081761006289,
+    "argument_accuracy": 0.22012578616352202
+  }
+}

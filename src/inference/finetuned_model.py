@@ -12,7 +12,7 @@ Usage:
 import argparse
 import json
 from mlx_lm import load, generate
-from inference import load_test_data, extract_tools_and_query, format_prompt_for_base_model, extract_function_calls_from_response
+from .base_model import load_test_data, extract_tools_and_query, format_prompt_for_base_model, extract_function_calls_from_response
 
 
 def test_finetuned_model(num_examples=5, verbose=False):

@@ -14,10 +14,10 @@ pip install -r requirements.txt
 
 ```bash
 # Step 1: Load data from HuggingFace
-python src/load_data.py --dataset Salesforce/xlam-function-calling-60k --split train --num_examples 1000
+python src/data/load_data.py --dataset Salesforce/xlam-function-calling-60k --split train --num_examples 1000
 
 # Step 2: Prepare data for Gemma model and split into train/validation/test
-python src/prep_data.py --input_file data/training/xlam-function-calling-60k_train_1000examples
+python src/data/prep_data.py --input_file data/training/xlam-function-calling-60k_train_1000examples
 ```
 
 ### 3. Start Fine-tuning
@@ -51,28 +51,42 @@ python -m mlx_lm lora \
 
 ```bash
 # Test base model performance
-python src/inference.py
+python src/inference/base_model.py
 
-# Test fine-tuned model (easy-to-use script)
-python src/test_model.py
+# Test fine-tuned model performance
+python src/inference/finetuned_model.py
 
 # Test with more examples and verbose output
-python src/test_model.py --num_examples 10 --verbose
+python src/inference/finetuned_model.py --num_examples 10 --verbose
 
-# Analyze and compare results
-python src/analyze_results.py --verbose
+# Analyze syntactic validity results
+python src/analysis/syntactic_analysis.py --verbose
+
+# Run semantic correctness analysis
+python src/analysis/semantic_analysis.py
 ```
 
+**Note:** All scripts should be run from the project root directory (`mlx_finetuning/`) to ensure proper path resolution.
+
 ## 📁 Project Structure
+
+The project is organized into logical modules for better maintainability and understanding:
 
 ```
 mlx_finetuning/
 ├── src/
-│   ├── load_data.py         # Load data from HuggingFace
-│   ├── prep_data.py         # Format data for Gemma model
-│   ├── inference.py         # Inference script
-│   ├── test_model.py        # Easy-to-use test script for fine-tuned model
-│   └── analyze_results.py   # Compare and analyze test results
+│   ├── data/                # Data processing modules
+│   │   ├── load_data.py     # Load data from HuggingFace
+│   │   └── prep_data.py     # Format data for Gemma model
+│   ├── inference/           # Model inference modules
+│   │   ├── base_model.py    # Base model testing
+│   │   └── finetuned_model.py # Fine-tuned model testing
+│   ├── analysis/            # Analysis and evaluation modules
+│   │   ├── syntactic_analysis.py # Syntactic validity analysis
+│   │   └── semantic_analysis.py # Semantic correctness analysis
+│   └── utils/               # Utility modules
+│       ├── analyze_training.py # Training process analysis
+│       └── create_clean_training_plot.py # Training visualization
 ├── data/
 │   ├── training/            # Training data
 │   │   ├── train.jsonl      # Training data (80%)
@@ -80,19 +94,38 @@ mlx_finetuning/
 │   │   └── test.jsonl       # Test data (10%)
 │   └── results/             # Test results
 │       ├── base_model_test_results.json
-│       └── finetuned_model_test_results.json
+│       ├── fintuned_model_test_results.json
+│       └── semantic_analysis.json
 ├── gemma-3-1b-function-calling-4bit/  # Fine-tuned model weights
 ├── requirements.txt         # Python dependencies
 ├── README.md               # Research paper
-└── TECHNICAL_MANUAL.md     # This file
+└── MANUAL.md               # This file
 ```
+
+### 🏗️ Modular Architecture Benefits
+
+**Clear Separation of Concerns:**
+- **`data/`**: All data loading and preprocessing logic
+- **`inference/`**: Model testing and evaluation scripts
+- **`analysis/`**: Results analysis and performance metrics
+- **`utils/`**: Training analysis and visualization tools
+
+**Easy Navigation:**
+- Each module has a specific purpose and clear naming
+- Related functionality is grouped together
+- Import paths are intuitive and self-documenting
+
+**Maintainability:**
+- Changes to one module don't affect others
+- Easy to add new functionality in the appropriate module
+- Clear dependencies between modules
 
 ## 🔧 Configuration Options
 
-### Data Preparation (`prep_data.py`)
+### Data Preparation (`src/data/prep_data.py`)
 
 ```bash
-python src/prep_data.py [OPTIONS]
+python src/data/prep_data.py [OPTIONS]
 
 Options:
   --input_file TEXT       Path to input dataset file (required)
@@ -195,6 +228,16 @@ The pipeline expects data in the following format:
    - **Base**: Use `load("mlx-community/gemma-3-1b-it-4bit")`
    - **Check**: Adapter files exist in specified path
 
+6. **Import Errors with Modular Structure**
+   - **Solution**: Run scripts from project root directory (`mlx_finetuning/`)
+   - **Check**: Use relative imports within modules (e.g., `from .base_model import ...`)
+   - **Verify**: All module dependencies are properly installed
+
+7. **Path Resolution Issues**
+   - **Solution**: Ensure you're in the correct directory when running scripts
+   - **Check**: Data files exist in expected locations (`data/training/`, `data/results/`)
+   - **Verify**: Model weights are in the correct adapter path
+
 ## 📈 Monitoring Training
 
 MLX-LM provides detailed logging during training:
@@ -229,27 +272,35 @@ Saved final weights to gemma-3-1b-function-calling-4bit/adapters.safetensors.
 
 ### Base Model Testing
 ```bash
-python src/inference.py
+python src/inference/base_model.py
 ```
-- Tests 50 examples from the test set
+- Tests 100 examples from the test set
 - Generates `data/results/base_model_test_results.json`
 - Includes success rate and detailed results
 
 ### Fine-tuned Model Testing
 ```bash
-python src/test_model.py --num_examples 50 --verbose
+python src/inference/finetuned_model.py --num_examples 100 --verbose
 ```
 - Tests the fine-tuned model on the same examples
-- Generates `data/results/test_model_results.json`
+- Generates `data/results/fintuned_model_test_results.json`
 - Compares against base model performance
 
-### Results Analysis
+### Syntactic Validity Analysis
 ```bash
-python src/analyze_results.py --verbose
+python src/analysis/syntactic_analysis.py --verbose
 ```
 - Compares base model vs fine-tuned model results
-- Calculates improvement metrics
+- Calculates syntactic validity metrics (JSON generation success)
 - Provides detailed performance breakdown
+
+### Semantic Correctness Analysis
+```bash
+python src/analysis/semantic_analysis.py
+```
+- Analyzes actual vs expected function calls
+- Measures semantic accuracy (not just syntactic validity)
+- Provides comprehensive performance metrics
 
 ## 📚 Additional Resources
 

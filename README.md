@@ -118,7 +118,11 @@ The training process demonstrated remarkable efficiency and stability:
 - **Convergence Phase** (iterations 150-500): Stable improvement to final loss of 0.783
 - **Validation Alignment**: Training and validation losses remained closely aligned
 
-## 5.0 Discussion
+## 6.0 Conclusion
+
+This project successfully demonstrates that Small Language Models can be effectively fine-tuned for specialized agentic tool-calling tasks using memory-efficient techniques. The 87% success rate achieved represents a significant improvement over the base model's 50% performance, validating the viability of this approach for real-world applications.
+
+The combination of 4-bit quantization, LoRA fine-tuning, and MLX optimization enables efficient training on consumer hardware while maintaining high performance, making specialized AI agents accessible and practical for a wide range of applications.
 
 ### 5.1 Research Question Answer
 
@@ -136,12 +140,6 @@ The training process demonstrated remarkable efficiency and stability:
 - **Domain Specificity**: Performance is optimized for the specific function-calling format used in training
 - **Sample Size**: Evaluation was conducted on 100 examples (complete test set)
 - **Hardware Dependency**: Results are specific to Apple Silicon with MLX framework
-
-## 6.0 Conclusion
-
-This project successfully demonstrates that Small Language Models can be effectively fine-tuned for specialized agentic tool-calling tasks using memory-efficient techniques. The 87% success rate achieved represents a significant improvement over the base model's 50% performance, validating the viability of this approach for real-world applications.
-
-The combination of 4-bit quantization, LoRA fine-tuning, and MLX optimization enables efficient training on consumer hardware while maintaining high performance, making specialized AI agents accessible and practical for a wide range of applications.
 
 ## 7.0 Future Work
 

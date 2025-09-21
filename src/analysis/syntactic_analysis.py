@@ -28,15 +28,35 @@ def load_results(file_path):
         return None
 
 
+def calculate_syntactic_success(extracted_calls: str) -> bool:
+    """
+    Calculate syntactic success based on extracted function calls.
+    
+    Args:
+        extracted_calls (str): Extracted function calls string
+        
+    Returns:
+        bool: True if syntactically valid JSON function calls
+    """
+    if not extracted_calls or extracted_calls.strip() == "":
+        return False
+    
+    try:
+        calls = json.loads(extracted_calls)
+        return isinstance(calls, list) and len(calls) > 0
+    except json.JSONDecodeError:
+        return False
+
+
 def calculate_metrics(results):
-    """Calculate performance metrics from test results."""
+    """Calculate performance metrics from standardized test results."""
     if not results:
         return None
     
     total_examples = len(results)
     
-    # Calculate success based on is_success field (now available in both datasets)
-    successful_calls = sum(1 for r in results if r.get('is_success', False))
+    # Calculate syntactic success based on extracted_function_calls
+    successful_calls = sum(1 for r in results if calculate_syntactic_success(r.get('extracted_function_calls', '')))
     
     success_rate = (successful_calls / total_examples) * 100 if total_examples > 0 else 0
     
@@ -46,8 +66,8 @@ def calculate_metrics(results):
     invalid_responses = 0
     
     for result in results:
-        # Check both possible field names for response
-        response = result.get('response', '') or result.get('finetuned_model_response', '') or result.get('base_model_response', '')
+        # Check actual_response field
+        response = result.get('actual_response', '')
         if '```json' in response:
             markdown_json_responses += 1
         elif response.strip().startswith('[') or response.strip().startswith('{'):

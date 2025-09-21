@@ -33,29 +33,38 @@ def normalize_function_calls(calls_str: str) -> List[Dict[str, Any]]:
         return []
 
 
-def extract_function_name_and_args(call: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
+def extract_function_name_and_args(call: Any) -> Tuple[str, Dict[str, Any]]:
     """
     Extract function name and arguments from a function call object.
     """
-    if 'function' in call and isinstance(call['function'], dict):
-        func_name = call['function'].get('name', '')
-        args_str = call['function'].get('arguments', '')
-        
-        # Parse arguments if they're a string
-        if isinstance(args_str, str):
-            try:
-                args = json.loads(args_str)
-            except:
-                args = {}
-        else:
-            args = args_str if isinstance(args_str, dict) else {}
+    # Handle string input (shouldn't happen but let's be safe)
+    if isinstance(call, str):
+        return '', {}
+    
+    # Handle dict input
+    if isinstance(call, dict):
+        if 'function' in call and isinstance(call['function'], dict):
+            func_name = call['function'].get('name', '')
+            args_str = call['function'].get('arguments', '')
             
-        return func_name, args
-    else:
-        # Handle direct format: {"name": "func", "arguments": {...}}
-        func_name = call.get('name', '')
-        args = call.get('arguments', {})
-        return func_name, args
+            # Parse arguments if they're a string
+            if isinstance(args_str, str):
+                try:
+                    args = json.loads(args_str)
+                except:
+                    args = {}
+            else:
+                args = args_str if isinstance(args_str, dict) else {}
+                
+            return func_name, args
+        else:
+            # Handle direct format: {"name": "func", "arguments": {...}}
+            func_name = call.get('name', '')
+            args = call.get('arguments', {})
+            return func_name, args
+    
+    # Handle other types
+    return '', {}
 
 
 def compare_function_calls(expected: List[Dict], actual: List[Dict]) -> Dict[str, Any]:
@@ -177,28 +186,14 @@ def analyze_semantic_correctness(results_file: str, model_name: str) -> Dict[str
     semantic_metrics = []
     
     for result in results:
-        # Get expected response
+        # Get expected and actual responses from standardized format
         expected_response = result.get('expected_response', '')
+        actual_response = result.get('actual_response', '')
+        extracted_calls = result.get('extracted_function_calls', '')
         
-        # If no expected_response field, try to extract from user_query (for fine-tuned model)
-        if not expected_response and 'user_query' in result:
-            expected_response = extract_expected_from_user_query(result['user_query'])
-        
-        # Get actual response - use extracted_function_calls if available (it's already parsed)
-        if 'extracted_function_calls' in result:
-            actual_calls_str = result['extracted_function_calls']
-            actual_calls = normalize_function_calls(actual_calls_str)
-        elif 'base_model_response' in result:
-            actual_response = result['base_model_response']
-            actual_calls = normalize_function_calls(actual_response)
-        elif 'response' in result:
-            actual_response = result['response']
-            actual_calls = normalize_function_calls(actual_response)
-        else:
-            continue
-        
-        # Normalize expected function calls
+        # Normalize function calls
         expected_calls = normalize_function_calls(expected_response)
+        actual_calls = normalize_function_calls(extracted_calls)
         
         # Compare
         comparison = compare_function_calls(expected_calls, actual_calls)

@@ -11,98 +11,100 @@ Usage:
 
 import argparse
 import json
+import sys
+import os
 from mlx_lm import load, generate
-from .base_model import load_test_data, extract_tools_and_query, format_prompt_for_base_model, extract_function_calls_from_response
+
+# Add the src directory to the path so we can import from utils
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from utils.test_data_loader import (
+    load_standardized_test_data, 
+    save_standardized_results, 
+    create_standardized_result
+)
+from base_model import extract_tools_and_query, format_prompt_for_base_model, extract_function_calls_from_response
 
 
-def test_finetuned_model(num_examples=5, verbose=False):
+def test_finetuned_model(num_examples=100, verbose=False):
     """
-    Test the fine-tuned model on sample data.
+    Test the fine-tuned model on standardized data.
     
     Args:
         num_examples (int): Number of examples to test
         verbose (bool): Whether to show detailed output
+        
+    Returns:
+        List[Dict]: Test results
     """
-    print("🚀 Testing Fine-tuned Gemma Function Calling Model")
+    print("🧪 Testing Fine-tuned Model")
     print("=" * 60)
     
     # Load fine-tuned model
     print("Loading fine-tuned model...")
     model, tokenizer = load('mlx-community/gemma-3-1b-it-4bit', adapter_path='gemma-3-1b-function-calling-4bit')
-    print("✓ Model loaded successfully")
+    print("✓ Fine-tuned model loaded")
     
-    # Load test data
-    print(f"\nLoading {num_examples} test examples...")
-    test_examples = load_test_data('data/training/test.jsonl', num_examples)
-    print(f"✓ Loaded {len(test_examples)} examples")
+    # Load standardized test data
+    test_file = "data/training/test.jsonl"
+    print(f"Loading {num_examples} standardized examples from {test_file}...")
+    test_examples = load_standardized_test_data(test_file, num_examples)
+    print(f"✓ Loaded {len(test_examples)} standardized examples")
     
-    # Test each example
-    print(f"\nTesting model on {len(test_examples)} examples...")
-    print("=" * 60)
-    
+    # Test the model
     results = []
-    for i, example in enumerate(test_examples, 1):
-        print(f"\n📝 Example {i}/{len(test_examples)}")
-        print("-" * 40)
+    for example in test_examples:
+        print(f"Testing Example {example['example_id']}/{len(test_examples)}")
         
-        # Extract tools and query from the test data
-        tools_json, user_query = extract_tools_and_query(example['text'])
-        
-        # Format prompt for the model
-        prompt = format_prompt_for_base_model(tools_json, user_query)
+        # Format prompt for base model (same format as training)
+        prompt = format_prompt_for_base_model(example['tools_json'], example['user_query'])
         
         # Generate response
-        response = generate(model, tokenizer, prompt=prompt, verbose=False, max_tokens=200)
-        
-        # Extract function calls from response
-        extracted_calls = extract_function_calls_from_response(response)
-        
-        # Check if response contains valid function calls
-        is_success = False
         try:
-            calls = json.loads(extracted_calls)
-            is_success = isinstance(calls, list) and len(calls) > 0
-        except:
-            pass
-        
-        # Store result
-        result = {
-            'example_id': i,
-            'user_query': user_query,
-            'tools_json': tools_json,
-            'response': response,
-            'extracted_function_calls': extracted_calls,
-            'is_success': is_success
-        }
-        results.append(result)
-        
-        # Display results
-        print(f"Query: {user_query[:100]}{'...' if len(user_query) > 100 else ''}")
-        print(f"Response: {response[:200]}{'...' if len(response) > 200 else ''}")
-        
-        if verbose:
-            print(f"Extracted calls: {extracted_calls}")
-            print(f"Success: {'✅' if is_success else '❌'}")
-        
-        print()
+            response = generate(
+                model,
+                tokenizer,
+                prompt=prompt,
+                verbose=False,
+                max_tokens=200
+            )
+            
+            # Extract function calls from response
+            extracted_calls = extract_function_calls_from_response(response)
+            print(f"\nExtracted Function Calls:")
+            print(f"{extracted_calls}")
+            
+            # Create standardized result (NO is_success - calculated in analysis)
+            result = create_standardized_result(
+                example=example,
+                actual_response=response,
+                extracted_function_calls=extracted_calls,
+                prompt_used=prompt,
+                model_name="finetuned_model"
+            )
+            results.append(result)
+            
+        except Exception as e:
+            print(f"Error generating response: {str(e)}")
+            result = create_standardized_result(
+                example=example,
+                actual_response=f"ERROR: {str(e)}",
+                extracted_function_calls="",
+                prompt_used=prompt,
+                model_name="finetuned_model"
+            )
+            results.append(result)
     
-    # Calculate and display summary
-    success_count = sum(1 for r in results if r['is_success'])
-    success_rate = (success_count / len(results)) * 100
+    # Save results
+    output_file = "data/results/fintuned_model_test_results.json"
+    save_standardized_results(results, output_file)
     
+    # Print summary
     print("=" * 60)
     print("📊 TEST SUMMARY")
     print("=" * 60)
     print(f"Examples tested: {len(results)}")
-    print(f"Successful function calls: {success_count}")
-    print(f"Success rate: {success_rate:.1f}%")
     print(f"Model: gemma-3-1b-it-4bit (fine-tuned)")
-    
-    # Save results
-    output_file = "data/results/fintuned_model_test_results.json"
-    with open(output_file, 'w') as f:
-        json.dump(results, f, indent=2)
-    print(f"\nResults saved to: {output_file}")
+    print(f"Results saved to: {output_file}")
     
     return results
 

@@ -4,6 +4,16 @@ import json
 import pandas as pd
 from pathlib import Path
 from typing import Dict, List, Any
+import sys
+import os
+
+# Add the src directory to the path so we can import from utils
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from utils.test_data_loader import (
+    load_standardized_test_data, 
+    save_standardized_results, 
+    create_standardized_result
+)
 
 
 def load_test_data(test_file: str, num_examples: int = 5) -> List[Dict[str, Any]]:
@@ -132,39 +142,26 @@ def extract_function_calls_from_response(response: str) -> str:
 
 def test_base_model(model, tokenizer, test_examples: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
-    Test the base model on test examples.
+    Test the base model on standardized examples.
     
     Args:
         model: Loaded model
         tokenizer: Loaded tokenizer
-        test_examples: List of test examples
+        test_examples: List of standardized test examples
         
     Returns:
         List[Dict[str, Any]]: Results with predictions
     """
     results = []
     
-    for i, example in enumerate(test_examples):
-        print(f"\n{'='*60}")
-        print(f"Testing Example {i+1}/{len(test_examples)}")
-        print(f"{'='*60}")
-        
-        # Extract tools and query from the formatted text
-        text = example['text']
-        tools_json, user_query = extract_tools_and_query(text)
-        
-        print(f"Tools: {tools_json[:100]}..." if len(tools_json) > 100 else f"Tools: {tools_json}")
-        print(f"User Query: {user_query}")
+    for example in test_examples:
+        print(f"Testing Example {example['example_id']}/{len(test_examples)}")
         
         # Format prompt for base model
-        prompt = format_prompt_for_base_model(tools_json, user_query)
+        prompt = format_prompt_for_base_model(example['tools_json'], example['user_query'])
         
-        print(f"\nFormatted Prompt:")
-        print(f"{prompt[:200]}..." if len(prompt) > 200 else prompt)
-        
-        # Generate response
-        print(f"\nGenerating response...")
         try:
+            # Generate response
             response = generate(
                 model,
                 tokenizer,
@@ -173,47 +170,30 @@ def test_base_model(model, tokenizer, test_examples: List[Dict[str, Any]]) -> Li
                 max_tokens=200
             )
             
-            print(f"\nBase Model Response:")
-            print(f"{response}")
-            
             # Extract function calls from response
             extracted_calls = extract_function_calls_from_response(response)
             print(f"\nExtracted Function Calls:")
             print(f"{extracted_calls}")
             
-            # Check if response contains valid function calls
-            is_success = False
-            try:
-                calls = json.loads(extracted_calls)
-                is_success = isinstance(calls, list) and len(calls) > 0
-            except:
-                pass
-            
-            # Store results
-            result = {
-                'example_id': i + 1,
-                'tools': tools_json,
-                'user_query': user_query,
-                'expected_response': text.split('<start_of_turn>model\n')[1].split('<end_of_turn>')[0] if '<start_of_turn>model\n' in text else "",
-                'base_model_response': response,
-                'extracted_function_calls': extracted_calls,
-                'is_success': is_success,
-                'prompt_used': prompt
-            }
+            # Create standardized result (NO is_success - calculated in analysis)
+            result = create_standardized_result(
+                example=example,
+                actual_response=response,
+                extracted_function_calls=extracted_calls,
+                prompt_used=prompt,
+                model_name="base_model"
+            )
             results.append(result)
             
         except Exception as e:
             print(f"Error generating response: {str(e)}")
-            result = {
-                'example_id': i + 1,
-                'tools': tools_json,
-                'user_query': user_query,
-                'expected_response': text.split('<start_of_turn>model\n')[1].split('<end_of_turn>')[0] if '<start_of_turn>model\n' in text else "",
-                'base_model_response': f"ERROR: {str(e)}",
-                'extracted_function_calls': "",
-                'is_success': False,
-                'prompt_used': prompt
-            }
+            result = create_standardized_result(
+                example=example,
+                actual_response=f"ERROR: {str(e)}",
+                extracted_function_calls="",
+                prompt_used=prompt,
+                model_name="base_model"
+            )
             results.append(result)
     
     return results
@@ -241,9 +221,9 @@ def main():
     test_file = "data/training/test.jsonl"
     num_examples = 100  # Test all examples in the test set
     
-    print(f"Loading {num_examples} examples from {test_file}...")
-    test_examples = load_test_data(test_file, num_examples)
-    print(f"✓ Loaded {len(test_examples)} examples")
+    print(f"Loading {num_examples} standardized examples from {test_file}...")
+    test_examples = load_standardized_test_data(test_file, num_examples)
+    print(f"✓ Loaded {len(test_examples)} standardized examples")
     
     # Load base model (without fine-tuning)
     print(f"\nLoading base model...")
@@ -256,7 +236,7 @@ def main():
     
     # Save results
     output_file = "data/results/base_model_test_results.json"
-    save_results(results, output_file)
+    save_standardized_results(results, output_file)
     
     # Print summary
     print(f"\n{'='*60}")

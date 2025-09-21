@@ -99,7 +99,7 @@ def test_finetuned_model(num_examples=5, verbose=False):
     print(f"Model: gemma-3-1b-it-4bit (fine-tuned)")
     
     # Save results
-    output_file = "data/results/test_model_results.json"
+    output_file = "data/results/fintuned_model_test_results.json"
     with open(output_file, 'w') as f:
         json.dump(results, f, indent=2)
     print(f"\nResults saved to: {output_file}")
@@ -123,8 +123,8 @@ Examples:
     parser.add_argument(
         "--num_examples", 
         type=int, 
-        default=5,
-        help="Number of examples to test (default: 5)"
+        default=100,
+        help="Number of examples to test (default: 100)"
     )
     
     parser.add_argument(

@@ -239,7 +239,7 @@ def main():
     
     # Load test data
     test_file = "data/training/test.jsonl"
-    num_examples = 50
+    num_examples = 100  # Test all examples in the test set
     
     print(f"Loading {num_examples} examples from {test_file}...")
     test_examples = load_test_data(test_file, num_examples)

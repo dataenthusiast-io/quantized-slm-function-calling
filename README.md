@@ -1,4 +1,4 @@
-# Quantized Fine-Tuning of SLM for Specialized Agentic Tool-Calling
+# Quantized Fine-Tuning of SLM for Agentic Tool-Calling
 
 ## 1.0 Introduction and Motivation
 
@@ -52,8 +52,6 @@ The training process demonstrated excellent convergence characteristics and effi
 - **Total Training Time**: ~15 minutes
 - **Memory Utilization**: Consistent 100% utilization throughout training
 
-![Convergence Analysis](data/analysis/convergence_analysis.png)
-
 **Training Stability and Performance:**
 The model showed consistent improvement throughout training with no signs of overfitting. The validation loss decreased steadily from 2.211 to 0.840, demonstrating effective learning without memorization.
 
@@ -61,26 +59,31 @@ The model showed consistent improvement throughout training with no signs of ove
 
 ### 3.3 Phase 3: Evaluation
 
-- **Method:** We implemented an automated evaluation system that checks for valid JSON function call generation.
-- **Metrics:** Success rate based on the ability to generate properly formatted function calls with correct structure.
+- **Method:** We implemented an automated evaluation system that measures generative capability for function calling.
+- **Metrics:** Success rate based on the ability to generate syntactically valid JSON function calls with proper structure.
+- **Evaluation Criteria:** A response is considered successful if it contains:
+  - Valid JSON that can be parsed without errors
+  - Non-empty array structure
+  - Proper function call format (list of objects with required fields)
+- **Note:** This evaluation measures generative capability (syntactic validity) rather than semantic correctness (whether the function calls match the expected response).
 - **Baseline Comparison:** The fine-tuned model's performance was compared against the base model's zero-shot performance on the same test set.
-- **Sample Size:** 50 examples from the test set for comprehensive evaluation.
+- **Sample Size:** 100 examples from the complete test set for comprehensive evaluation.
 
 ## 4.0 Results
 
 ### 4.1 Quantitative Results
 
-Our fine-tuning achieved outstanding results on function calling tasks:
+Our fine-tuning achieved outstanding results on function calling tasks. The success rate measures the model's ability to generate syntactically valid JSON function calls with proper structure:
 
 | Model | Success Rate | Successful Examples | Failed Examples | Improvement |
 |-------|-------------|-------------------|----------------|-------------|
-| **Base Model (4-bit)** | **56.0%** | 28/50 | 22 | - |
-| **Fine-tuned Model** | **96.0%** | 48/50 | 2 | **+40.0%** |
+| **Base Model (4-bit)** | **50.0%** | 50/100 | 50 | - |
+| **Fine-tuned Model** | **87.0%** | 87/100 | 13 | **+37.0%** |
 
 ### 4.2 Key Findings
 
-- ✅ **96% Success Rate**: Near-perfect function calling performance
-- ✅ **71.4% Relative Improvement**: Massive boost over base model
+- ✅ **87% Success Rate**: Excellent generative capability for function calling syntax
+- ✅ **74% Relative Improvement**: Significant boost in valid JSON function call generation
 - ✅ **Consistent JSON Format**: Reliable markdown JSON function call generation
 - ✅ **Memory Efficiency**: Peak usage of only 8.35 GB on consumer hardware
 - ✅ **Training Stability**: No hardware compatibility issues with 4-bit quantization
@@ -131,25 +134,25 @@ The training process demonstrated remarkable efficiency and stability:
 ### 5.3 Limitations
 
 - **Domain Specificity**: Performance is optimized for the specific function-calling format used in training
-- **Sample Size**: Evaluation was conducted on 50 examples (though this represents 50% of the test set)
+- **Sample Size**: Evaluation was conducted on 100 examples (complete test set)
 - **Hardware Dependency**: Results are specific to Apple Silicon with MLX framework
 
 ## 6.0 Conclusion
 
-This project successfully demonstrates that Small Language Models can be effectively fine-tuned for specialized agentic tool-calling tasks using memory-efficient techniques. The 96% success rate achieved represents a significant improvement over the base model's 56% performance, validating the viability of this approach for real-world applications.
+This project successfully demonstrates that Small Language Models can be effectively fine-tuned for specialized agentic tool-calling tasks using memory-efficient techniques. The 87% success rate achieved represents a significant improvement over the base model's 50% performance, validating the viability of this approach for real-world applications.
 
 The combination of 4-bit quantization, LoRA fine-tuning, and MLX optimization enables efficient training on consumer hardware while maintaining high performance, making specialized AI agents accessible and practical for a wide range of applications.
 
 ## 7.0 Future Work
 
-- **Larger Scale Evaluation**: Test on the complete test set (100 examples)
 - **Cross-Domain Generalization**: Evaluate performance on different function-calling datasets
 - **Human Evaluation**: Implement LLM-as-Judge evaluation for more nuanced assessment
 - **Production Deployment**: Test real-world performance in live applications
+- **Model Scaling**: Experiment with larger SLMs (3B+ parameters) for even better performance
 
 ## 8.0 Technical Implementation
 
-For detailed technical setup, implementation, and usage instructions, see [TECHNICAL_MANUAL.md](TECHNICAL_MANUAL.md).
+For detailed technical setup, implementation, and usage instructions, see [MANUAL.md](MANUAL.md).
 
 ---
 

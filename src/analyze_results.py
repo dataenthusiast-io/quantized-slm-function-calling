@@ -153,7 +153,7 @@ Examples:
     
     # Define file paths
     base_results_file = "data/results/base_model_test_results.json"
-    finetuned_results_file = "data/results/finetuned_model_test_results.json"
+    finetuned_results_file = "data/results/fintuned_model_test_results.json"
     
     # Load results
     print("Loading test results...")

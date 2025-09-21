@@ -1,0 +1,12 @@
+{
+  "total_iterations": 500,
+  "initial_train_loss": 2.1,
+  "final_train_loss": 0.783,
+  "initial_val_loss": 2.1692233725149497,
+  "final_val_loss": 0.8604693399827452,
+  "loss_reduction": 62.71428571428572,
+  "peak_memory": 8.35,
+  "avg_training_speed": 0.6058947368421052,
+  "convergence_iteration": 150,
+  "training_stability": 34.2533192308992
+}

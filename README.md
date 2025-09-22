@@ -55,8 +55,6 @@ The training process demonstrated excellent convergence characteristics and effi
 **Training Stability and Performance:**
 The model showed consistent improvement throughout training with no signs of overfitting. The validation loss decreased steadily from 2.211 to 0.840, demonstrating effective learning without memorization.
 
-![Performance Metrics](data/analysis/performance_analysis.png)
-
 ### 3.3 Phase 3: Evaluation
 
 - **Method:** We implemented an automated evaluation system that measures generative capability for function calling.
@@ -91,11 +89,16 @@ The semantic accuracy measures how well the generated function calls match the e
 | **Fine-tuned Model** | **56.0%** | 69.2% | 60.4% | 0.753 |
 | **Improvement** | **+47.0%** | **+59.1%** | **+50.9%** | **+0.637** |
 
-#### 4.1.3 Performance Summary
+#### 4.1.3 Performance Comparison Visualization
 
-The standardized evaluation results demonstrate massive improvements across all dimensions:
+The following visualization clearly demonstrates the dramatic improvements achieved through fine-tuning across both syntactic and semantic dimensions:
 
 ![Performance Analysis](data/analysis/performance_analysis.png)
+
+The performance analysis shows:
+- **Syntactic Validity**: 79% success rate vs 10% baseline (+69 percentage points)
+- **Semantic Correctness**: 56% exact matches vs 9% baseline (+47 percentage points)
+- **Relative Improvements**: 690% improvement in syntax, 522% improvement in semantics
 
 ### 4.2 Key Findings
 

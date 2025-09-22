@@ -44,7 +44,7 @@ def test_finetuned_model(num_examples=100, verbose=False):
     
     # Load fine-tuned model
     print("Loading fine-tuned model...")
-    model, tokenizer = load('mlx-community/gemma-3-1b-it-4bit', adapter_path='model/gemma-3-1b-function-calling-4bit')
+    model, tokenizer = load('mlx-community/gemma-3-1b-it-4bit', adapter_path='gemma-3-1b-function-calling-4bit')
     print("✓ Fine-tuned model loaded")
     
     # Load standardized test data

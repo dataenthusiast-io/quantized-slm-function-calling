@@ -44,7 +44,7 @@ The training process demonstrated excellent convergence characteristics and effi
 - **Convergence Point**: Achieved stable convergence around iteration 150
 - **Training Stability**: 34.25% coefficient of variation (indicating stable learning)
 
-![Training Analysis](data/analysis/clean_training_analysis.png)
+![Training Analysis](data/analysis/training_analysis.png)
 
 **Memory and Computational Efficiency:**
 - **Peak Memory Usage**: 8.35 GB (well within 16GB MacBook Pro capacity)
@@ -55,7 +55,7 @@ The training process demonstrated excellent convergence characteristics and effi
 **Training Stability and Performance:**
 The model showed consistent improvement throughout training with no signs of overfitting. The validation loss decreased steadily from 2.211 to 0.840, demonstrating effective learning without memorization.
 
-![Performance Metrics](data/analysis/training_analysis.png)
+![Performance Metrics](data/analysis/performance_analysis.png)
 
 ### 3.3 Phase 3: Evaluation
 
@@ -94,6 +94,8 @@ The semantic accuracy measures how well the generated function calls match the e
 #### 4.1.3 Performance Summary
 
 The standardized evaluation results demonstrate massive improvements across all dimensions:
+
+![Performance Analysis](data/analysis/performance_analysis.png)
 
 ### 4.2 Key Findings
 
@@ -142,6 +144,18 @@ The training process demonstrated remarkable efficiency and stability:
 - **Initial Learning Phase** (iterations 1-150): Rapid loss reduction from 2.1 to 0.9
 - **Convergence Phase** (iterations 150-500): Stable improvement to final loss of 0.783
 - **Validation Alignment**: Training and validation losses remained closely aligned
+
+#### 4.3.2 Comprehensive Training Visualization
+
+The complete training analysis demonstrates the efficiency and effectiveness of our LoRA fine-tuning approach:
+
+![Training Analysis](data/analysis/training_analysis.png)
+
+This comprehensive visualization shows:
+- **Loss Progression**: Smooth convergence from initial high loss to stable final performance
+- **Loss Reduction**: Quantified improvements in both training and validation losses
+- **Training Metrics**: Memory efficiency, speed, and stability scores
+- **Key Milestones**: Critical points in the training timeline with performance markers
 
 ## 6.0 Discussion
 

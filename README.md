@@ -44,7 +44,7 @@ The training process demonstrated excellent convergence characteristics and effi
 - **Convergence Point**: Achieved stable convergence around iteration 150
 - **Training Stability**: 34.25% coefficient of variation (indicating stable learning)
 
-![Training Analysis](data/results/clean_training_analysis.png)
+![Training Analysis](data/analysis/clean_training_analysis.png)
 
 **Memory and Computational Efficiency:**
 - **Peak Memory Usage**: 8.35 GB (well within 16GB MacBook Pro capacity)
@@ -55,7 +55,7 @@ The training process demonstrated excellent convergence characteristics and effi
 **Training Stability and Performance:**
 The model showed consistent improvement throughout training with no signs of overfitting. The validation loss decreased steadily from 2.211 to 0.840, demonstrating effective learning without memorization.
 
-![Performance Metrics](data/results/performance_metrics.png)
+![Performance Metrics](data/analysis/performance_metrics.png)
 
 ### 3.3 Phase 3: Evaluation
 

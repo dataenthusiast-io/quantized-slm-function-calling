@@ -127,38 +127,6 @@ The performance analysis shows:
 - **Peak Memory Usage**: 8.353 GB
 - **Total Tokens Processed**: 507,059
 
-#### 4.3.1 Training Efficiency Analysis
-
-The training process demonstrated remarkable efficiency and stability:
-
-**Convergence Characteristics:**
-- **Loss Reduction**: 62.7% improvement from initial to final training loss
-- **Convergence Speed**: Stable convergence achieved by iteration 150
-- **Training Stability**: 34.25% coefficient of variation indicating consistent learning
-- **No Overfitting**: Validation loss continued to decrease alongside training loss
-
-**Resource Utilization:**
-- **Memory Efficiency**: Peak usage of 8.35 GB (52% of available 16GB)
-- **Training Speed**: 0.606 iterations/second average throughput
-- **Hardware Utilization**: Consistent 100% memory utilization throughout training
-- **Energy Efficiency**: Complete training in 15 minutes on consumer hardware
-
-**Learning Dynamics:**
-- **Initial Learning Phase** (iterations 1-150): Rapid loss reduction from 2.1 to 0.9
-- **Convergence Phase** (iterations 150-500): Stable improvement to final loss of 0.783
-- **Validation Alignment**: Training and validation losses remained closely aligned
-
-#### 4.3.2 Comprehensive Training Visualization
-
-The complete training analysis demonstrates the efficiency and effectiveness of our LoRA fine-tuning approach:
-
-![Training Analysis](data/analysis/training_analysis.png)
-
-This comprehensive visualization shows:
-- **Loss Progression**: Smooth convergence from initial high loss to stable final performance
-- **Loss Reduction**: Quantified improvements in both training and validation losses
-- **Training Metrics**: Memory efficiency, speed, and stability scores
-- **Key Milestones**: Critical points in the training timeline with performance markers
 
 ## 6.0 Discussion
 

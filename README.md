@@ -55,7 +55,7 @@ The training process demonstrated excellent convergence characteristics and effi
 **Training Stability and Performance:**
 The model showed consistent improvement throughout training with no signs of overfitting. The validation loss decreased steadily from 2.211 to 0.840, demonstrating effective learning without memorization.
 
-![Performance Metrics](data/analysis/performance_metrics.png)
+![Performance Metrics](data/analysis/training_analysis.png)
 
 ### 3.3 Phase 3: Evaluation
 

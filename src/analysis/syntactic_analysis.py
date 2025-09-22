@@ -220,6 +220,27 @@ Examples:
             print("🎉 Fine-tuning was successful!")
         else:
             print("⚠️  Fine-tuning may need adjustment")
+            
+        # Save detailed results to JSON
+        output = {
+            'base_model': {
+                'model_name': 'Base Model (4-bit)',
+                **base_metrics
+            },
+            'finetuned_model': {
+                'model_name': 'Fine-tuned Model',
+                **finetuned_metrics
+            },
+            'improvements': {
+                'success_rate_improvement': improvement,
+                'success_rate_improvement_pct': (improvement / base_metrics['success_rate']) * 100 if base_metrics['success_rate'] > 0 else 0
+            }
+        }
+        
+        with open('data/analysis/syntactic_analysis.json', 'w') as f:
+            json.dump(output, f, indent=2)
+        
+        print(f"\n💾 Detailed results saved to: data/analysis/syntactic_analysis.json")
     else:
         print("Run both test scripts to see the full comparison")
     

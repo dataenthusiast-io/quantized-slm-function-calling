@@ -289,10 +289,10 @@ def main():
         }
     }
     
-    with open('data/results/semantic_analysis.json', 'w') as f:
+    with open('data/analysis/semantic_analysis.json', 'w') as f:
         json.dump(output, f, indent=2)
     
-    print(f"\n💾 Detailed results saved to: data/results/semantic_analysis.json")
+    print(f"\n💾 Detailed results saved to: data/analysis/semantic_analysis.json")
 
 
 if __name__ == "__main__":

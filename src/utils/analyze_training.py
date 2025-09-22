@@ -151,9 +151,9 @@ def plot_performance_metrics(data, output_dir):
     
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 12))
     
-    # 1. Model Performance Comparison
+    # 1. Model Performance Comparison (Updated with current metrics)
     models = ['Base Model', 'Fine-tuned Model']
-    success_rates = [56.0, 96.0]
+    success_rates = [10.0, 79.0]  # Current syntactic validity success rates
     colors = ['#ff7f7f', '#7fbf7f']
     
     bars = ax1.bar(models, success_rates, color=colors, alpha=0.8, edgecolor='black', linewidth=1)

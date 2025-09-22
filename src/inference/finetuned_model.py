@@ -10,7 +10,7 @@ Usage:
 """
 
 import argparse
-import json
+import json 
 import sys
 import os
 from mlx_lm import load, generate
@@ -23,7 +23,6 @@ from utils.test_data_loader import (
     create_standardized_result
 )
 from utils.inference import (
-    extract_tools_and_query,
     format_prompt_for_inference,
     extract_function_calls_from_response
 )

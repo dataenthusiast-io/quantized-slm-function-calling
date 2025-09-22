@@ -1,0 +1,24 @@
+{
+  "base_model": {
+    "model_name": "Base Model (4-bit)",
+    "total_examples": 100,
+    "successful_calls": 10,
+    "success_rate": 10.0,
+    "valid_json_responses": 0,
+    "markdown_json_responses": 25,
+    "invalid_responses": 75
+  },
+  "finetuned_model": {
+    "model_name": "Fine-tuned Model",
+    "total_examples": 100,
+    "successful_calls": 79,
+    "success_rate": 79.0,
+    "valid_json_responses": 0,
+    "markdown_json_responses": 98,
+    "invalid_responses": 2
+  },
+  "improvements": {
+    "success_rate_improvement": 69.0,
+    "success_rate_improvement_pct": 690.0
+  }
+}

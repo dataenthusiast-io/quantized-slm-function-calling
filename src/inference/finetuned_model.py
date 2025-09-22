@@ -22,7 +22,11 @@ from utils.test_data_loader import (
     save_standardized_results, 
     create_standardized_result
 )
-from base_model import extract_tools_and_query, format_prompt_for_base_model, extract_function_calls_from_response
+from utils.inference import (
+    extract_tools_and_query,
+    format_prompt_for_inference,
+    extract_function_calls_from_response
+)
 
 
 def test_finetuned_model(num_examples=100, verbose=False):
@@ -55,8 +59,8 @@ def test_finetuned_model(num_examples=100, verbose=False):
     for example in test_examples:
         print(f"Testing Example {example['example_id']}/{len(test_examples)}")
         
-        # Format prompt for base model (same format as training)
-        prompt = format_prompt_for_base_model(example['tools_json'], example['user_query'])
+        # Format prompt for inference (same format as training)
+        prompt = format_prompt_for_inference(example['tools_json'], example['user_query'])
         
         # Generate response
         try:

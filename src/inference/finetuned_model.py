@@ -17,7 +17,7 @@ from mlx_lm import load, generate
 
 # Add the src directory to the path so we can import from utils
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from utils.test_data_loader import (
+from utils.data import (
     load_standardized_test_data, 
     save_standardized_results, 
     create_standardized_result
